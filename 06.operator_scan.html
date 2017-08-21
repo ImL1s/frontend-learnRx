@@ -1,0 +1,46 @@
+<html>
+
+<head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js"></script>
+    <script src="https://unpkg.com/rxjs/bundles/Rx.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="./rxjs/dist/rx.all.js"></script> -->
+</head>
+
+<body>
+    <input type="button" id="btn_plus" value="+" />
+    <input type="button" id="btn_minus" value="-" />
+    <label>0</label>
+    <script>
+        $(function () {
+            const addButton = $("#btn_plus");
+            const minusButton = $("#btn_minus");
+
+            const addClickSource = Rx.Observable
+                .fromEvent(addButton, 'click')
+                .mapTo(1);
+
+            const minusSource = Rx.Observable
+                .fromEvent(minusButton, 'click')
+                .mapTo(-1);
+
+            const numberState = Rx.Observable.empty()
+                .startWith(0)
+                .merge(addClickSource, minusSource)
+                .scan((prev, current) => {
+                    return prev + current;
+                }, 0);
+
+            numberState.subscribe(
+                x => console.log(x),
+                e => { },
+                () => { }
+            );
+        });
+    </script>
+</body>
+
+
+</html>
