@@ -10,11 +10,25 @@ window.onload = function () {
     const keyword = Rx.Observable.fromEvent(searchInput, 'input');
     const selectItem = Rx.Observable.fromEvent(suggestList, 'click');
 
-    console.log(searchInput);
+    const render = (suggestArr = []) => {
+        suggestList.innerHTML = suggestArr
+            .map(item => '<li>' + item + '</li>')
+            .join('');
+    };
+
     keyword
-        .switchMap(e => getSuggestList(e.target.value))
-        .switchMap((x) => x)
-        .subscribe(console.log);
+        .debounceTime(250)
+        .switchMap(x => Rx.Observable.from(getSuggestList(x.target.value)).retry(3),
+        (x, res) => res[1])
+        .subscribe(x => render(x));
+
+    selectItem
+        .filter(x => x.target.matches('li'))
+        .map(x => x.target.innerHTML)
+        .subscribe(x => {
+            searchInput.value = x;
+            render();
+        });
 };
 
 
