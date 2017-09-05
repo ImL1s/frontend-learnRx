@@ -12,7 +12,7 @@
 <body>
     <input type="button" id="btn_plus" value="+" />
     <input type="button" id="btn_minus" value="-" />
-    <label>0</label>
+    <label id="label_main">0</label>
     <script>
         $(function () {
             const addButton = $("#btn_plus");
@@ -34,7 +34,10 @@
                 }, 0);
 
             numberState.subscribe(
-                x => console.log(x),
+                x => {
+                    console.log(x);
+                    $("#label_main").text(x);
+                },
                 e => { },
                 () => { }
             );

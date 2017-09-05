@@ -1,0 +1,29 @@
+<html>
+
+<head>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/2.3.22/rx.all.js"></script>
+    <script src="https://unpkg.com/rxjs/bundles/Rx.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="./rxjs/dist/rx.all.js"></script> -->
+</head>
+
+<body>
+    <input type="button" id="demo" value="click" />
+    <script>
+        $(function () {
+            const button = document.getElementById('demo');
+            const click = Rx.Observable.fromEvent(button, 'click');
+            const example = click
+                .bufferTime(500)
+                .filter(arr => arr.length >= 2);
+
+            example.subscribe(x => {
+                console.log("double click");
+            });
+        });
+    </script>
+</body>
+
+</html>
